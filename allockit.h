@@ -29,8 +29,7 @@
        initialization. For other allocators, it's possible this
        function will be different (potentially using "create"
        semantics rather than "init" semantics), or it may even just
-       have a global, constant allocator available for use like the
-       page allocator ("page_alloc.{c,h}").
+       have a global, constant allocator available for use.
 
        It's recommended for allocators that use the init function
        pattern that you 0-initialize the allocator so that forgetting
@@ -78,7 +77,8 @@
 
        Writing an AllocKit allocator is a touch more complicated than
        using one, but I've endeavored to make it as simple as
-       possible. For an example, read page_alloc.{c,h}.
+       possible. There are currently no examples, but that will change
+       soon.
 
        IMPORTANT: It is the responsibility of the allocator to ensure
        thread-safety, AllocKit provides no guarantees in this regard.
