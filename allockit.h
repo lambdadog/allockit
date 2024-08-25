@@ -14,10 +14,10 @@
        Using an AllocKit allocator is quite simple. First you will
        need to initialize the allocator. This is done via
        allocator-specific types and functions, so for this example
-       we'll use the included page allocator (page_alloc.{c,h}).
+       we'll use a theoretical allocator ("my_alloc.h").
 
          #include "allockit.h"
-         #include "page_alloc.h"
+         #include "my_alloc.h"
 
          void do_work(AkAlloc *);
 
@@ -25,24 +25,30 @@
          main(int argc, char **argc)
          {
 
-       For the page allocator, we use `page_alloc_init` for
-       initialization. It's recommended that you 0-initialize the
-       allocator so that forgetting to call the init function simply
-       causes an easily-detectable null pointer dereference when you
-       use it, rather than reading whatever bytes were previously in
-       that stack space as a pointer and potentially causing more
-       confusing errors.
+       For this theoretical allocator, we'll use `my_alloc_init` for
+       initialization. For other allocators, it's possible this
+       function will be different (potentially using "create"
+       semantics rather than "init" semantics), or it may even just
+       have a global, constant allocator available for use like the
+       page allocator ("page_alloc.{c,h}").
 
-           PageAlloc page_allocator = {0};
-           page_alloc_init(&page_allocator);
+       It's recommended for allocators that use the init function
+       pattern that you 0-initialize the allocator so that forgetting
+       to call the init function simply causes an easily-detectable
+       null pointer dereference when you use it, rather than reading
+       whatever bytes were previously in that stack space as a pointer
+       and potentially causing more confusing errors.
+
+           MyAlloc my_allocator = {0};
+           my_alloc_init(&my_allocator);
 
        Then we can use the allocator via `ak_alloc`, passing it
-       `&page_allocator.alloc`. This pointer (of type `AkAlloc *` is
+       `&my_allocator.alloc`. This pointer (of type `AkAlloc *` is
        also what you'll want functions that allow usage of an
        arbitrary allocator to take as an argument.
 
-           int *heap_list = ak_alloc(&page_allocator.alloc, int, 10)
-           do_work(&page_allocator.alloc);
+           int *heap_list = ak_alloc(&my_allocator.alloc, int, 10)
+           do_work(&my_allocator.alloc);
 
        To resize our allocation (similar to realloc) we'll use
        `ak_resize`. Since resizing an allocation won't always succeed,
@@ -50,19 +56,20 @@
        successful. In this trivial example we'll just exit the program
        with an error code.
 
-           if (!ak_resize(&page_allocator.alloc, int, 20))
+           if (!ak_resize(&my_allocator.alloc, int, 20))
              return 1;
 
        Finally, to free our allocation we use `ak_free`.
 
-           ak_free(&page_allocator.alloc, heap_list);
+           ak_free(&my_allocator.alloc, heap_list);
 
        After we're done using our allocator, it may have resources it
        cannot yet free (depending on the allocator), so some
-       allocators may provide a "deinit" or "destroy" function. The
-       page allocator doesn't have one of these, but it can be
-       important to call this function to avoid memory leaks, so make
-       sure to do so.
+       allocators may provide a "deinit" or "destroy" function. If the
+       allocator you're using has one of these, it's important to call
+       it to avoid space leaks.
+
+           my_alloc_deinit(&my_allocator);
 
            return 0;
          }
