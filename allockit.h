@@ -205,12 +205,12 @@
 #ifndef ALLOCKIT_ALIGNOF
 #include <stdalign.h>
 #define ALLOCKIT_ALIGNOF alignof
-#endif  /* ALLOCKIT_ALIGNOF */
+#endif  /* !ALLOCKIT_ALIGNOF */
 
 #ifndef ALLOCKIT_SIZE_T
 #include <stddef.h>
 #define ALLOCKIT_SIZE_T size_t
-#endif  /* ALLOCKIT_SIZE_T */
+#endif  /* !ALLOCKIT_SIZE_T */
 
 typedef struct AkAlloc {
   void *(*alloc)(struct AkAlloc *,
