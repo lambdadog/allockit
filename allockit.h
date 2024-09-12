@@ -233,7 +233,7 @@ typedef struct AkAlloc {
   ak_resize(pAlloc, Addr, sizeof(T), ALLOCKIT_ALIGNOF(T), Count)
 
 #define ak_free(pAlloc, Addr) \
-  (((Alloc)->free)((pAlloc), Addr))
+  (((pAlloc)->free)((pAlloc), Addr))
 
 #endif  /* !ALLOCKIT_H_DEFS */
 
