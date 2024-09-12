@@ -199,17 +199,17 @@
 
  */
 
-#ifndef ALLOCKIT_H
-#define ALLOCKIT_H
+#ifndef ALLOCKIT_H_DEFS
+#define ALLOCKIT_H_DEFS
 
 #ifndef ALLOCKIT_ALIGNOF
-#include <stdalign.h>
-#define ALLOCKIT_ALIGNOF alignof
+#  include <stdalign.h>
+#  define ALLOCKIT_ALIGNOF alignof
 #endif  /* !ALLOCKIT_ALIGNOF */
 
 #ifndef ALLOCKIT_SIZE_T
-#include <stddef.h>
-#define ALLOCKIT_SIZE_T size_t
+#  include <stddef.h>
+#  define ALLOCKIT_SIZE_T size_t
 #endif  /* !ALLOCKIT_SIZE_T */
 
 typedef struct AkAlloc {
@@ -235,7 +235,7 @@ typedef struct AkAlloc {
 #define ak_free(pAlloc, Addr) \
   (((Alloc)->free)((pAlloc), Addr))
 
-#endif  /* !ALLOCKIT_H */
+#endif  /* !ALLOCKIT_H_DEFS */
 
 /*
   This software is available under 2 licenses, choose whichever you
