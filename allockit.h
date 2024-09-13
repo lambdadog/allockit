@@ -222,12 +222,12 @@ typedef struct AkAlloc {
                void *);
 } AkAlloc;
 
-#define ak_alloc(pAlloc, Size, Align, Count) \
+#define ak_alloc_raw(pAlloc, Size, Align, Count) \
   (((pAlloc)->alloc)((pAlloc), Size, Align, Count))
 #define ak_alloc(pAlloc, T, Count) \
   ak_alloc(pAlloc, sizeof(T), ALLOCKIT_ALIGNOF(T), Count)
 
-#define ak_resize(pAlloc, Addr, Size, Align, Count) \
+#define ak_resize_raw(pAlloc, Addr, Size, Align, Count) \
   (((Alloc)->resize)((pAlloc), Addr, Size, Align, Count))
 #define ak_resize(pAlloc, Addr, T, Count) \
   ak_resize(pAlloc, Addr, sizeof(T), ALLOCKIT_ALIGNOF(T), Count)
